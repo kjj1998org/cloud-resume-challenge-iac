@@ -23,3 +23,36 @@ variable "s3_bucket_sse_algorithm" {
   default     = "AES256"
 }
 
+variable "s3_enable_bucket_policy" {
+  description = "To control whether the bucket policy gets added."
+  type = bool
+}
+
+variable "s3_block_public_access" {
+  description = "To control whether public access is blocked."
+  type = bool
+}
+
+variable "s3_target_bucket_for_logging" {
+  description = "To identify the bucket where logs will be stored."
+  type = string
+  default = ""
+}
+
+variable "s3_enable_logging" {
+  description = "To control whether to enable logging for this bucket."
+  type = bool
+  default = false
+}
+
+variable "s3_website_redirect" {
+  description = "To control whether the s3 bucket website will be redirected."
+  type = bool
+  default = false
+}
+
+variable "s3_redirect_requests_host" {
+  description = "Name of the host where requests are redirected."
+  type = string
+  default = ""
+}
