@@ -19,3 +19,8 @@ variable "subdomain_alias_record_status" {
     type = bool
     default = false
 }
+
+variable "cloudfront_distribution_id" {
+    description = "The cloudfront distribution id."
+    type = string
+}

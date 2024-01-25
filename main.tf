@@ -66,6 +66,7 @@ module "root_domain_alias_record" {
 
   s3_bucket_name    = module.root_domain_s3_bucket.name
   route53_zone_name = "jjkoh.net"
+  cloudfront_distribution_id = module.static_cloudfront_distribution.id
 }
 
 module "subdomain_alias_record" {
@@ -74,6 +75,7 @@ module "subdomain_alias_record" {
   subdomain_alias_record_status = true
   s3_bucket_name                = module.subdomain_s3_bucket.name
   route53_zone_name             = "jjkoh.net"
+  cloudfront_distribution_id = module.static_cloudfront_distribution.id
 
   depends_on = [module.root_domain_alias_record]
 }

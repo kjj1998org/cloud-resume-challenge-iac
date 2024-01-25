@@ -11,12 +11,16 @@ resource "aws_route53_record" "route53_record" {
   type    = var.route53_record_type
   
   alias {
-    name                   = data.aws_s3_bucket.selected.website_domain
-    zone_id                = data.aws_s3_bucket.selected.hosted_zone_id
+    name                   = data.aws_cloudfront_distribution.selected.domain_name
+    zone_id                = data.aws_cloudfront_distribution.selected.hosted_zone_id
     evaluate_target_health = false
   }
 }
 
 data "aws_s3_bucket" "selected" {
   bucket = var.s3_bucket_name
+}
+
+data "aws_cloudfront_distribution" "selected" {
+  id = var.cloudfront_distribution_id
 }
