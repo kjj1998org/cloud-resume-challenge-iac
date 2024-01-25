@@ -14,7 +14,7 @@ provider "aws" {
 module "root_domain_s3_bucket" {
   source = "./modules/aws-s3-static-website-bucket"
 
-  bucket_name                  = "jjkoh2.net"
+  bucket_name                  = "jjkoh.net"
   s3_enable_bucket_policy      = true
   s3_block_public_access       = false
   s3_enable_logging            = true
@@ -32,7 +32,7 @@ module "root_domain_s3_bucket" {
 module "subdomain_s3_bucket" {
   source = "./modules/aws-s3-static-website-bucket"
 
-  bucket_name               = "www.jjkoh2.net"
+  bucket_name               = "www.jjkoh.net"
   s3_enable_bucket_policy   = false
   s3_block_public_access    = true
   s3_website_redirect       = true
@@ -48,7 +48,7 @@ module "subdomain_s3_bucket" {
 module "logging_s3_bucket" {
   source = "./modules/aws-s3-static-website-bucket"
 
-  bucket_name             = "logs.jjkoh2.net"
+  bucket_name             = "logs.jjkoh.net"
   s3_enable_bucket_policy = false
   s3_block_public_access  = true
 
@@ -58,6 +58,23 @@ module "logging_s3_bucket" {
     Environment = "dev"
     Name        = "My logging bucket"
   }
+}
+
+module "root_domain_alias_record" {
+  source = "./modules/aws-route53-static-hosting-record"
+
+  s3_bucket_name    = module.root_domain_s3_bucket.name
+  route53_zone_name = "jjkoh.net"
+}
+
+module "subdomain_alias_record" {
+  source = "./modules/aws-route53-static-hosting-record"
+
+  subdomain_alias_record_status = true
+  s3_bucket_name                = module.subdomain_s3_bucket.name
+  route53_zone_name             = "jjkoh.net"
+
+  depends_on = [ module.root_domain_alias_record ]
 }
 
 resource "aws_s3_object" "logs_folder" {
@@ -70,13 +87,14 @@ resource "aws_s3_object" "logs_folder" {
 resource "aws_s3_object" "index" {
   bucket       = module.root_domain_s3_bucket.name
   key          = "resume.html"
-  source       = "./resume.html"
+  source       = "./static/resume.html"
   content_type = "text/html"
 }
 
 resource "aws_s3_object" "error" {
   bucket       = module.root_domain_s3_bucket.name
   key          = "error.html"
-  source       = "./error.html"
+  source       = "./static/error.html"
   content_type = "text/html"
 }
+
