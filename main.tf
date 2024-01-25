@@ -48,9 +48,10 @@ module "subdomain_s3_bucket" {
 module "logging_s3_bucket" {
   source = "./modules/aws-s3-static-website-bucket"
 
-  bucket_name             = "logs.jjkoh.net"
-  s3_enable_bucket_policy = false
-  s3_block_public_access  = true
+  bucket_name                = "logs.jjkoh.net"
+  s3_enable_bucket_policy    = false
+  s3_block_public_access     = true
+  s3_bucket_object_ownership = "BucketOwnerPreferred"
 
 
   tags = {
@@ -74,7 +75,16 @@ module "subdomain_alias_record" {
   s3_bucket_name                = module.subdomain_s3_bucket.name
   route53_zone_name             = "jjkoh.net"
 
-  depends_on = [ module.root_domain_alias_record ]
+  depends_on = [module.root_domain_alias_record]
+}
+
+module "static_cloudfront_distribution" {
+  source = "./modules/aws-cloudfront-static-distribution"
+
+  issued_cert_domain_name = "jjkoh.net"
+  logging_bucket_name     = "logs.jjkoh.net.s3.amazonaws.com"
+  bucket_name             = module.root_domain_s3_bucket.name
+  default_root_object     = "resume.html"
 }
 
 resource "aws_s3_object" "logs_folder" {

@@ -49,11 +49,11 @@ output "subdomain_website_endpoint" {
 }
 
 output "root_domain_alias_record_name" {
-  value = module.root_domain_alias_record.route53_record_name
+  value       = module.root_domain_alias_record.route53_record_name
   description = "Name of the root domain alias record."
 }
 
 output "subdomain_alias_record_name" {
-  value = module.subdomain_alias_record.route53_record_name
+  value       = module.subdomain_alias_record.route53_record_name
   description = "Name of the subdomain alias record."
 }
