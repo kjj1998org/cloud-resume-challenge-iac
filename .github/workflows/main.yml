@@ -7,7 +7,7 @@ on:
   push:
     branches: [ master ]
 env:
-  AWS_REGION : "ap-southeast-1" #Change to reflect your Region
+  AWS_REGION : ap-southeast-1 #Change to reflect your Region
 
 # Permission can be added at job level or workflow level    
 permissions:
